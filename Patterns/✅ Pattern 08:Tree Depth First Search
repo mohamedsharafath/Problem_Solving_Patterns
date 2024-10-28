@@ -1,0 +1,154 @@
+**Depth-First Search (DFS)** is a tree traversal algorithm that explores as far down a branch as possible before backtracking. It’s a popular method to traverse a tree or graph, where nodes are visited by exploring one branch fully before moving on to another branch. 
+
+### Types of DFS Traversals
+For trees, DFS can be categorized into three primary traversal orders:
+1. **Pre-order (Root, Left, Right)**
+2. **In-order (Left, Root, Right)** - Only for binary trees
+3. **Post-order (Left, Right, Root)**
+
+These variations are all DFS but differ based on when the node is processed in relation to its children.
+
+### Where DFS is Used
+DFS is helpful in applications like:
+- **Pathfinding**: Useful for exploring all paths, especially in puzzles or games where all routes must be tried.
+- **Tree Depth Exploration**: It’s well-suited for exploring structures that branch deeply, like file systems.
+- **Backtracking Algorithms**: For problems that require searching through possible solutions, such as mazes or combinatorial problems.
+
+### DFS Traversal Order Examples
+For the binary tree below:
+
+```
+       1
+      / \
+     2   3
+    / \ / \
+   4  5 6  7
+```
+
+- **Pre-order**: `1, 2, 4, 5, 3, 6, 7`
+- **In-order**: `4, 2, 5, 1, 6, 3, 7`
+- **Post-order**: `4, 5, 2, 6, 7, 3, 1`
+
+### C++ Code for DFS Traversals
+
+Here’s how each DFS traversal is implemented in C++ for a binary tree:
+
+```cpp
+#include <iostream>
+using namespace std;
+
+// Definition for a binary tree node
+struct TreeNode {
+    int val;
+    TreeNode* left;
+    TreeNode* right;
+    
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+
+// Pre-order DFS: Root -> Left -> Right
+void preOrder(TreeNode* node) {
+    if (node == nullptr) return;
+
+    // Visit the root
+    cout << node->val << " ";
+    // Recur on left subtree
+    preOrder(node->left);
+    // Recur on right subtree
+    preOrder(node->right);
+}
+
+// In-order DFS: Left -> Root -> Right
+void inOrder(TreeNode* node) {
+    if (node == nullptr) return;
+
+    // Recur on left subtree
+    inOrder(node->left);
+    // Visit the root
+    cout << node->val << " ";
+    // Recur on right subtree
+    inOrder(node->right);
+}
+
+// Post-order DFS: Left -> Right -> Root
+void postOrder(TreeNode* node) {
+    if (node == nullptr) return;
+
+    // Recur on left subtree
+    postOrder(node->left);
+    // Recur on right subtree
+    postOrder(node->right);
+    // Visit the root
+    cout << node->val << " ";
+}
+
+int main() {
+    // Create a binary tree
+    TreeNode* root = new TreeNode(1);
+    root->left = new TreeNode(2);
+    root->right = new TreeNode(3);
+    root->left->left = new TreeNode(4);
+    root->left->right = new TreeNode(5);
+    root->right->left = new TreeNode(6);
+    root->right->right = new TreeNode(7);
+
+    // Pre-order Traversal
+    cout << "Pre-order Traversal: ";
+    preOrder(root);
+    cout << endl;
+
+    // In-order Traversal
+    cout << "In-order Traversal: ";
+    inOrder(root);
+    cout << endl;
+
+    // Post-order Traversal
+    cout << "Post-order Traversal: ";
+    postOrder(root);
+    cout << endl;
+
+    return 0;
+}
+```
+
+### Explanation:
+1. **TreeNode Structure**: Represents a binary tree node with an integer value and pointers to its left and right children.
+2. **Pre-order Traversal (Root, Left, Right)**:
+   - Visit the root, then recursively traverse the left subtree, followed by the right subtree.
+3. **In-order Traversal (Left, Root, Right)**:
+   - Traverse the left subtree first, visit the root, and finally traverse the right subtree.
+4. **Post-order Traversal (Left, Right, Root)**:
+   - Traverse the left subtree, then the right subtree, and visit the root at the end.
+5. **Main Function**:
+   - Builds a sample binary tree and performs each type of traversal, printing the results.
+
+### Output:
+```
+Pre-order Traversal: 1 2 4 5 3 6 7 
+In-order Traversal: 4 2 5 1 6 3 7 
+Post-order Traversal: 4 5 2 6 7 3 1
+```
+
+### Time Complexity:
+- **O(n)**: Each traversal visits each node exactly once, where `n` is the total number of nodes.
+
+### Space Complexity:
+- **O(h)**: Where `h` is the height of the tree. This accounts for the recursion stack, which can go as deep as the tree height. For a balanced tree, this is `O(log n)`, but for a skewed tree, it can be `O(n)`.
+
+Binary Tree Path Sum (easy)
+https://leetcode.com/problems/path-sum/
+
+All Paths for a Sum (medium)
+https://leetcode.com/problems/path-sum-ii/
+
+Sum of Path Numbers (medium)
+https://leetcode.com/problems/sum-root-to-leaf-numbers/
+
+Count Paths for a Sum (medium)
+https://leetcode.com/problems/path-sum-iii/
+
+🌟 Tree Diameter (medium)
+https://leetcode.com/problems/diameter-of-binary-tree/
+
+🌟 Path with Maximum Sum (hard)
+https://leetcode.com/problems/binary-tree-maximum-path-sum/
