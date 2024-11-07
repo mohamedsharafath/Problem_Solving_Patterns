@@ -1,0 +1,110 @@
+Pattern 11: Modified Binary Search
+As we know, whenever we are given a sorted Array or LinkedList or Matrix, and we are asked to find a certain element, the best algorithm we can use is the Binary Search.
+
+The **Modified Binary Search** pattern refers to a class of problems that build upon the standard binary search technique but require additional modifications to solve more complex or specialized cases. While traditional binary search finds an element in a sorted array in `O(log n)` time, modified binary search adapts the core idea to solve various problem types.
+
+Here’s an overview of the pattern and some common types of problems it’s used for:
+
+### Core Idea of Modified Binary Search
+
+Binary search typically works by dividing the search range in half, eliminating half of the possibilities each time, and then continuing on the half where the target could be. **Modified Binary Search** uses this divide-and-conquer principle but introduces additional conditions, such as:
+- Searching in **rotated or shifted arrays**
+- Finding elements with **specific constraints**, like the **first or last occurrence** of a target
+- **Unknown sorted properties** within the array (e.g., **peak finding** in a mountain array)
+- Searching for **ranges or boundaries** instead of specific elements
+
+### Where Modified Binary Search is Used
+
+Modified binary search applies to scenarios where:
+- The array has unique properties (like being rotated, mountain-shaped, or cyclic).
+- We need to find **positions** rather than elements (like boundary indices).
+- The search involves **dynamic criteria** that change based on specific conditions within the array.
+
+### Common Modified Binary Search Problem Types
+
+1. **Searching in a Rotated Sorted Array**
+   - **Problem**: Given a sorted array that has been rotated (e.g., `[4,5,6,7,0,1,2]`), find a target element.
+   - **Modification**: Use binary search while accounting for the rotation. Identify the sorted half of the array at each step, determine if the target lies in that sorted half, and adjust the search range accordingly.
+
+2. **Finding an Element’s First or Last Occurrence**
+   - **Problem**: Find the first or last occurrence of a target in a sorted array with duplicate elements.
+   - **Modification**: Use binary search but adjust the search conditions to continue left or right until the first or last position of the target is located.
+
+3. **Finding the Peak Element in a Mountain Array**
+   - **Problem**: Given a "mountain" array (an array that first strictly increases then strictly decreases), find the peak element (highest value).
+   - **Modification**: Treat the array as two distinct regions (ascending and descending). Use binary search to focus on the region where the peak could lie by comparing middle values with neighbors.
+
+4. **Ceiling and Floor of a Number in a Sorted Array**
+   - **Problem**: Find the smallest element greater than or equal to (ceiling) or the largest element less than or equal to (floor) a target in a sorted array.
+   - **Modification**: Use binary search to track the closest candidate. If the middle element is smaller than the target, move to the right; if it’s larger, move to the left, updating the ceiling or floor as you go.
+
+5. **Minimum Difference Element in a Sorted Array**
+   - **Problem**: Find the element closest to the target value in a sorted array.
+   - **Modification**: Use binary search to home in on the range where the closest value lies. At the end of the search, the closest element is either the middle element or one of its nearest neighbors.
+
+### Example Walkthrough: Searching in a Rotated Sorted Array
+
+Let’s take a closer look at the first example:
+
+#### Problem Statement
+Suppose we have a rotated sorted array like `[4,5,6,7,0,1,2]` and a target value `0`. We need to find the index of `0`.
+
+#### Modified Binary Search Approach
+1. **Identify Sorted Half**:
+   - Start with `start = 0` and `end = array.size() - 1`.
+   - Calculate `mid = start + (end - start) / 2`.
+   - Check if the middle element `array[mid]` is the target.
+   - If not, determine which half of the array is sorted:
+     - If `array[start] <= array[mid]`, the left half is sorted.
+     - Otherwise, the right half is sorted.
+
+2. **Determine Target Location**:
+   - Once you know which half is sorted, check if the target is within the range of the sorted half.
+   - Adjust the search boundaries accordingly:
+     - If the target is in the sorted half, move the search to that half.
+     - Otherwise, search in the other half.
+
+3. **Iterate**:
+   - Repeat the steps until the target is found or the search range is exhausted.
+
+#### Complexity Analysis
+- **Time Complexity**: `O(log n)` as each iteration halves the search space.
+- **Space Complexity**: `O(1)` since it only uses a few extra variables.
+
+### Other Examples
+
+#### Peak Finding in Mountain Array
+For a mountain array like `[1, 3, 8, 12, 4, 2]`, finding the peak element (in this case, `12`) can be done by checking the middle value relative to its neighbors:
+- If `array[mid] > array[mid + 1]`, you’re in the descending part of the array, so move left.
+- If `array[mid] < array[mid + 1]`, you’re in the ascending part, so move right.
+- Continue until you find the peak element.
+
+### Benefits of the Modified Binary Search Pattern
+
+- **Efficiency**: Extends the power of binary search to solve more complex problems without increasing the time complexity beyond `O(log n)`.
+- **Wide Applicability**: Useful for real-world data, which often has more complexity than simple sorted lists (e.g., finding values in rotated arrays or dynamic ranges).
+- **Optimal Performance**: Helps in scenarios where linear search would be too slow for large datasets.
+
+Modified binary search is especially beneficial in coding interviews and competitive programming, where efficient solutions to search problems in altered arrays are often required. Would you like to go over any of these specific problem types with sample problems and more tailored explanations?
+
+Order-agnostic Binary Search (easy)
+https://leetcode.com/problems/binary-search/
+
+https://leetcode.com/problems/search-insert-position/
+
+Next Letter (medium)
+https://leetcode.com/problems/find-smallest-letter-greater-than-target/
+
+Number Range (medium)
+https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/
+
+Minimum Difference Element (medium)
+https://leetcode.com/problems/minimum-absolute-difference/
+
+🌟 Search in Rotated Array (medium)
+https://leetcode.com/problems/search-in-rotated-sorted-array/
+https://leetcode.com/problems/search-in-rotated-sorted-array-ii/
+
+🌟 Rotation Count (medium)
+https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
+https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/
