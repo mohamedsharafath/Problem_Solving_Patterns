@@ -1,0 +1,59 @@
+Operators (AND,OR,XOR,NOT,SHIFT)
+
+AND:
+both are 1 = 1
+else 0
+
+OR: 
+anyone is 1 = 1
+else 0
+
+XOR:
+odd no. of 1 = 1
+even no. of 1 = 0
+
+NOT:
+1.flip
+2.check -ve if yes -> 2`s compliment else stop
+
+SHIFT : [left,right]
+x>>i = x/(2^i)
+x<<i = x * 2^i
+
+INT_MAX = 2^31 - 1
+INT_MIN = - 2^31
+
+
+SWAP TWO NUMBERS:
+A = A^B
+B = A^B = (A^B)^B = A
+A = A^B =(A^B)^A = B
+
+CHECK IF THE ith BIT IS SET OR NOT
+N & 1<<i -> N
+N>>i & 1 -> N
+
+SET THE iTH BIT
+N = N | 1<<i
+
+CLEAR THE iTH BIT
+N & ~(1<<i)
+
+TOGGLE THE iTH BIT
+N ^ (1<<i)
+
+REMOVE THE LAST SET BIT
+6 = 110
+5 = 101  (i.e: N-1 can be written as flipping the rightmost setbit to 0 and the bits after that to 1)
+N & N-1
+
+COUNT THE NUMBER OF SET BIT
+while(n!=0)
+{
+  if(n&1 == 1)cnt++;
+  n>>1;
+}
+
+CHECK IF NUM IS A POWER OF @ OR NOT
+there should be only 1 set bit 
+(N & N-1 == 0)
