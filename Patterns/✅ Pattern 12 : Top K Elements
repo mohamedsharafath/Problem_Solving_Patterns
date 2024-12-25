@@ -1,0 +1,420 @@
+Pattern 13: Top 'K' Elements
+The **Top K Elements Pattern** using a heap is a powerful algorithmic technique commonly used to solve problems where you need to find the top or bottom `K` elements from a dataset (like the largest, smallest, most frequent, or least frequent elements).
+
+### Concept of the Top K Elements Pattern
+
+The idea is to use a **heap data structure** to efficiently track the `K` elements of interest. Heaps are particularly well-suited for this purpose because:
+1. They allow quick access to the **smallest (min-heap)** or **largest (max-heap)** element.
+2. They are efficient for insertion and removal, with time complexity of **O(log K)** for each operation.
+
+### Key Use Cases
+1. Finding the **K largest** or **K smallest** elements in an array.
+2. Finding the **K most frequent** or **K least frequent** elements.
+3. Solving sliding window problems where you track the top `K` elements dynamically.
+4. Streaming data, where you need to maintain the top `K` elements as new data arrives.
+
+---
+
+### Steps to Solve a Top K Elements Problem Using Heaps
+
+1. **Choose the Right Type of Heap**:
+   - **Min-Heap**: Use for keeping track of the `K largest` elements (discard smaller elements).
+   - **Max-Heap**: Use for keeping track of the `K smallest` elements (discard larger elements).
+   - For most frequent elements, use a heap with custom sorting based on frequency.
+
+2. **Iterate Through the Input**:
+   - Add elements to the heap.
+   - If the heap size exceeds `K`, remove the element that doesn't meet the criteria (e.g., smallest in a min-heap).
+
+3. **Retrieve the Result**:
+   - Once all elements are processed, the heap contains the `K` elements of interest.
+
+---
+
+### Example Problems
+
+#### 1. **Find K Largest Elements**
+
+**Problem**: Given an array `nums` and an integer `K`, return the `K` largest elements in the array.
+
+**Approach**:
+- Use a **min-heap** of size `K`.
+- Traverse through the array:
+  - Add each element to the heap.
+  - If the heap size exceeds `K`, remove the smallest element.
+- After processing, the heap contains the `K` largest elements.
+
+**C++ Code**:
+```cpp
+#include <iostream>
+#include <vector>
+#include <queue>
+using namespace std;
+
+vector<int> findKLargestElements(vector<int>& nums, int k) {
+    priority_queue<int, vector<int>, greater<int>> minHeap; // Min-Heap
+
+    // Add elements to the heap
+    for (int num : nums) {
+        minHeap.push(num);
+        if (minHeap.size() > k) {
+            minHeap.pop(); // Remove the smallest element
+        }
+    }
+
+    // Extract the K largest elements from the heap
+    vector<int> result;
+    while (!minHeap.empty()) {
+        result.push_back(minHeap.top());
+        minHeap.pop();
+    }
+
+    return result;
+}
+
+int main() {
+    vector<int> nums = {3, 2, 1, 5, 6, 4};
+    int k = 2;
+    vector<int> result = findKLargestElements(nums, k);
+    cout << "The " << k << " largest elements are: ";
+    for (int num : result) {
+        cout << num << " ";
+    }
+    return 0;
+}
+```
+
+**Input**: `nums = [3, 2, 1, 5, 6, 4]`, `k = 2`  
+**Output**: `5, 6`
+
+---
+
+#### 2. **K Most Frequent Elements**
+
+**Problem**: Given an array `nums` and an integer `K`, return the `K` most frequent elements.
+
+**Approach**:
+- Use a **hashmap** to count the frequency of each element.
+- Use a **min-heap** to track the top `K` frequent elements based on frequency.
+  - Push each element and its frequency into the heap.
+  - If the heap size exceeds `K`, remove the least frequent element.
+
+**C++ Code**:
+```cpp
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <unordered_map>
+using namespace std;
+
+vector<int> topKFrequentElements(vector<int>& nums, int k) {
+    unordered_map<int, int> freqMap; // Frequency map
+
+    // Count frequencies of each element
+    for (int num : nums) {
+        freqMap[num]++;
+    }
+
+    // Min-Heap to store elements by frequency
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> minHeap;
+
+    // Add elements to the heap
+    for (auto& [num, freq] : freqMap) {
+        minHeap.push({freq, num});
+        if (minHeap.size() > k) {
+            minHeap.pop(); // Remove the least frequent element
+        }
+    }
+
+    // Extract the K most frequent elements
+    vector<int> result;
+    while (!minHeap.empty()) {
+        result.push_back(minHeap.top().second);
+        minHeap.pop();
+    }
+
+    return result;
+}
+
+int main() {
+    vector<int> nums = {1, 1, 1, 2, 2, 3};
+    int k = 2;
+    vector<int> result = topKFrequentElements(nums, k);
+    cout << "The " << k << " most frequent elements are: ";
+    for (int num : result) {
+        cout << num << " ";
+    }
+    return 0;
+}
+```
+
+**Input**: `nums = [1, 1, 1, 2, 2, 3]`, `k = 2`  
+**Output**: `1, 2`
+
+---
+
+### Complexity Analysis
+
+#### Time Complexity:
+- **Heap Operations**: Adding/removing elements in a heap takes **O(log K)**.
+- For `N` elements:
+  - Building a frequency map: **O(N)**.
+  - Adding elements to the heap: **O(N log K)**.
+
+#### Space Complexity:
+- **Heap**: Stores up to `K` elements, so **O(K)**.
+- **Frequency Map**: For `N` unique elements, **O(N)**.
+
+---
+
+### Why Use Heaps for Top K Elements?
+
+1. **Efficiency**: Heaps provide a balanced approach for maintaining only `K` elements, which is more memory-efficient than sorting the entire array (which would take `O(N log N)`).
+2. **Streaming Data**: Heaps are ideal when data arrives dynamically, and we need to keep track of only the top `K` elements at any time.
+3. **Boundary Problems**: Heaps are useful for problems where elements outside the range of interest can be discarded early.
+
+---
+### Variations of the Top K Elements Pattern Using Heaps
+
+The Top K Elements pattern is incredibly versatile and can be adapted for a variety of problems. Below are some **variations** and their explanations with examples:
+
+---
+
+### 1. **Kth Largest or Smallest Element**
+
+#### Problem
+Find the **Kth largest** or **Kth smallest** element in an unsorted array.
+
+#### Approach
+- For the **Kth largest** element, use a **min-heap** of size `K`.
+  - Add elements to the heap.
+  - Remove the smallest element when the size exceeds `K`. At the end, the root of the heap is the Kth largest.
+- For the **Kth smallest** element, use a **max-heap** of size `K` (or invert the numbers to use a min-heap).
+
+#### Example (Kth Largest):
+**Input**: `nums = [3, 2, 1, 5, 6, 4]`, `K = 2`  
+**Output**: `5` (2nd largest)
+
+**C++ Code**:
+```cpp
+#include <iostream>
+#include <vector>
+#include <queue>
+using namespace std;
+
+int findKthLargest(vector<int>& nums, int k) {
+    priority_queue<int, vector<int>, greater<int>> minHeap;
+
+    for (int num : nums) {
+        minHeap.push(num);
+        if (minHeap.size() > k) {
+            minHeap.pop(); // Remove smallest element
+        }
+    }
+
+    return minHeap.top();
+}
+
+int main() {
+    vector<int> nums = {3, 2, 1, 5, 6, 4};
+    int k = 2;
+    cout << "The " << k << "th largest element is: " << findKthLargest(nums, k) << endl;
+    return 0;
+}
+```
+
+---
+
+### 2. **Sort an Array by Frequency**
+
+#### Problem
+Sort an array such that elements with higher frequency appear first. If two elements have the same frequency, sort them by value.
+
+#### Approach
+- Use a frequency map to count occurrences.
+- Use a **max-heap** where elements are stored as `{frequency, number}` pairs.
+- Sort by frequency in descending order.
+
+#### Example:
+**Input**: `nums = [1, 1, 2, 2, 2, 3]`  
+**Output**: `[2, 2, 2, 1, 1, 3]`
+
+**C++ Code**:
+```cpp
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <queue>
+using namespace std;
+
+vector<int> frequencySort(vector<int>& nums) {
+    unordered_map<int, int> freqMap;
+    for (int num : nums) {
+        freqMap[num]++;
+    }
+
+    // Max-Heap sorted by frequency
+    priority_queue<pair<int, int>> maxHeap;
+    for (auto& [num, freq] : freqMap) {
+        maxHeap.push({freq, num});
+    }
+
+    // Extract elements based on frequency
+    vector<int> result;
+    while (!maxHeap.empty()) {
+        int freq = maxHeap.top().first;
+        int num = maxHeap.top().second;
+        maxHeap.pop();
+
+        for (int i = 0; i < freq; i++) {
+            result.push_back(num);
+        }
+    }
+
+    return result;
+}
+
+int main() {
+    vector<int> nums = {1, 1, 2, 2, 2, 3};
+    vector<int> result = frequencySort(nums);
+    cout << "Sorted by frequency: ";
+    for (int num : result) {
+        cout << num << " ";
+    }
+    return 0;
+}
+```
+
+---
+
+### 3. **K Closest Points to Origin**
+
+#### Problem
+Given a list of points on a 2D plane, find the `K` points closest to the origin `(0, 0)`.
+
+#### Approach
+- Calculate the distance of each point from the origin using `distance = x^2 + y^2`.
+- Use a **max-heap** of size `K` to store points by distance (store negative distances to simulate max-heap using `priority_queue`).
+
+#### Example:
+**Input**: `points = [(1, 3), (-2, 2)]`, `K = 1`  
+**Output**: `[(-2, 2)]`
+
+**C++ Code**:
+```cpp
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <cmath>
+using namespace std;
+
+vector<vector<int>> kClosestPoints(vector<vector<int>>& points, int k) {
+    priority_queue<pair<int, vector<int>>> maxHeap;
+
+    for (auto& point : points) {
+        int distance = point[0] * point[0] + point[1] * point[1];
+        maxHeap.push({distance, point});
+
+        if (maxHeap.size() > k) {
+            maxHeap.pop(); // Remove farthest point
+        }
+    }
+
+    vector<vector<int>> result;
+    while (!maxHeap.empty()) {
+        result.push_back(maxHeap.top().second);
+        maxHeap.pop();
+    }
+
+    return result;
+}
+
+int main() {
+    vector<vector<int>> points = {{1, 3}, {-2, 2}};
+    int k = 1;
+    vector<vector<int>> result = kClosestPoints(points, k);
+
+    cout << "K Closest Points to Origin: ";
+    for (auto& point : result) {
+        cout << "[" << point[0] << ", " << point[1] << "] ";
+    }
+    return 0;
+}
+```
+
+---
+
+### 4. **Kth Largest Element in a Stream**
+
+#### Problem
+Find the `Kth largest` element in a **stream of numbers**. You are given a list of numbers, and new numbers arrive dynamically.
+
+#### Approach
+- Use a **min-heap** to maintain the `K` largest elements.
+- Each time a new number is added, insert it into the heap. If the heap size exceeds `K`, remove the smallest element.
+
+#### Example:
+**Input**: `nums = [4, 5, 8, 2]`, `add(3), add(5), add(10), add(9)`, `K = 3`  
+**Output**: After each addition: `[4, 5, 5, 8]`
+
+---
+
+### 5. **Find K Pairs with Smallest Sums**
+
+#### Problem
+Given two sorted arrays, find the `K` pairs `(u, v)` with the smallest sums.
+
+#### Approach
+- Use a **min-heap** to store pairs along with their sums.
+- Start by adding the smallest pairs (e.g., `(nums1[0], nums2[0])`).
+- Dynamically explore new pairs as elements are removed from the heap.
+
+---
+
+### Why Heaps Are Effective for Top K Problems
+
+1. **Efficiency**: Operations on heaps (insertion, deletion) are `O(log K)`, making them faster than sorting an entire array for large datasets.
+2. **Dynamic Nature**: Heaps work well with streaming data or when the dataset is too large to fit into memory.
+3. **Customizability**: Heaps can be adapted to solve problems with different criteria (e.g., distance, frequency, or sum).
+
+---
+
+# Pattern 13: Top 'K' Elements
+
+## Problems and Links:
+
+### 1. Kth Smallest Number (easy)  
+[Kth Largest Element in an Array](https://leetcode.com/problems/kth-largest-element-in-an-array/)
+
+### 2. 'K' Closest Points to the Origin (easy)  
+[K Closest Points to the Origin](https://leetcode.com/problems/k-closest-points-to-origin/)
+
+### 3. Top 'K' Frequent Numbers (medium)  
+[Top K Frequent Elements](https://leetcode.com/problems/top-k-frequent-elements/)
+
+### 4. Frequency Sort (medium)  
+[Sort Characters by Frequency](https://leetcode.com/problems/sort-characters-by-frequency/)
+
+### 5. Kth Largest Number in a Stream (medium)  
+[Kth Largest Element in a Stream](https://leetcode.com/problems/kth-largest-element-in-a-stream/)
+
+### 6. 'K' Closest Numbers (medium)  
+[Find K Closest Elements](https://leetcode.com/problems/find-k-closest-elements/)
+
+### 7. Maximum Distinct Elements (medium)  
+[Least Number of Unique Integers After K Removals](https://leetcode.com/problems/least-number-of-unique-integers-after-k-removals/)
+
+### 8. Sum of Elements (medium)  
+[Sum of Elements Between K1th and K2th Smallest](https://www.geeksforgeeks.org/sum-elements-k1th-k2th-smallest-elements/)
+
+### 9. Rearrange String (hard)  
+[Reorganize String](https://leetcode.com/problems/reorganize-string/)
+
+### 10. Rearrange String K Distance Apart (hard)  
+[Rearrange String K Distance Apart](https://leetcode.com/problems/rearrange-string-k-distance-apart/)
+
+### 11. Scheduling Tasks (hard)  
+[Task Scheduler](https://leetcode.com/problems/task-scheduler/)
+
+### 12. Frequency Stack (hard)  
+[Maximum Frequency Stack](https://leetcode.com/problems/maximum-frequency-stack/)
